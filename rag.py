@@ -37,7 +37,7 @@ def retrieve_relevant_chunks(question, index, chunks, embeddings_model, top_k=3)
     return relevant_chunks
 import google.generativeai as genai
 
-genai.configure(api_key="AIzaSyAQvW-7i3jnNu5qwolDOPV9q2HhdkKtrAU")
+genai.configure(api_key="")
 def generate_answer(question, relevant_chunks, model = genai.GenerativeModel("gemini-1.5-flash-latest")):
     context = " ".join(relevant_chunks)
     prompt = f"Question: {question}\nContext: {context}\nAnswer:"
