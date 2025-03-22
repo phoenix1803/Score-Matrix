@@ -1,5 +1,5 @@
 import google.generativeai as genai
-genai.configure(api_key="AIzaSyAQvW-7i3jnNu5qwolDOPV9q2HhdkKtrAU")
+genai.configure(api_key="")
 def generate_test_questions(text, num_questions, difficulty_level):
     model = genai.GenerativeModel("gemini-1.5-flash-latest")
     if num_questions <= 10:
