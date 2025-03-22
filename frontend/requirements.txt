@@ -1,0 +1,12 @@
+language_tool_python
+nltk
+numpy
+pandas
+pdfplumber
+python_docx
+scikit-learn
+sentence-transformers
+textblob
+transformers
+google-generativeai
+spacy

@@ -1,0 +1,23 @@
+[
+    {
+        "Question Number": 1,
+        "Question": "What is calorific value ? And what are the factors affecting it ?",
+        "Type": "Descriptive",
+        "Marks": 3,
+        "Reference Answer": "Calorific value is the amount of heat released when a substance undergoes complete combustion.  It's typically expressed in units like kJ/kg or kcal/g. Factors influencing it include the chemical composition of the fuel (e.g., the proportion of carbon, hydrogen, and other elements), moisture content, and the completeness of combustion."
+    },
+    {
+        "Question Number": 2,
+        "Question": "difference between coking coal and caking coal",
+        "Type": "Descriptive",
+        "Marks": 3,
+        "Reference Answer": "Coking coal is a specific type of caking coal that meets stringent quality standards for use in coke production.  Caking coal refers to any coal that softens and fuses upon heating, forming a coherent mass.  Therefore, all coking coal is caking coal, but not all caking coal is suitable for coking.  The key difference lies in the specific properties required for metallurgical applications."
+    },
+    {
+        "Question Number": 3,
+        "Question": "what is cracking of crude oil ? List its types",
+        "Type": "Descriptive",
+        "Marks": 4,
+        "Reference Answer": "Cracking is a process in petroleum refining where large, complex hydrocarbon molecules in crude oil are broken down into smaller, more useful molecules like gasoline and other fuels.  This is achieved through thermal cracking, which uses heat, or catalytic cracking, which employs catalysts to facilitate the process at lower temperatures.  Fluid catalytic cracking (FCC) is a prominent industrial example utilizing a fluidized catalyst bed.  Hydrocracking combines cracking with hydrogenation, yielding higher-quality products with fewer impurities.  The choice of cracking method depends on the desired product slate and economic considerations."
+    }
+]
