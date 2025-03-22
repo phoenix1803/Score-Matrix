@@ -7,7 +7,7 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 
-genai.configure(api_key="AIzaSyAQvW-7i3jnNu5qwolDOPV9q2HhdkKtrAU") 
+genai.configure(api_key="") 
 
 SENDER_EMAIL = "scorematrixx@gmail.com"
 SENDER_PASSWORD = "rigu skzn dqxm yiqn"
