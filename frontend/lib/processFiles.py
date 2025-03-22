@@ -27,7 +27,7 @@ from pdf2image import convert_from_path
 from PIL import Image
 import tempfile
 
-genai.configure(api_key="AIzaSyAQvW-7i3jnNu5qwolDOPV9q2HhdkKtrAU")
+genai.configure(api_key="")
 
 warnings.filterwarnings("ignore")
 
