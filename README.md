@@ -140,7 +140,14 @@ Built-in chatbot helps teachers or students query evaluation results, access rub
 
 - LangChain + Gemini API for RAG-based answer generation
 
-- Custom Machine Learning models for question classification and automated answer evaluation
+- Custom Machine Learning models for question classification and automated answer evaluation:(A multi-stage system combining multiple transformer models tailored for different tasks)
+  - Answer relevance and correctness
+
+  - Structural adherence (for essays)
+
+  - Tone and coherence
+
+  - Hybrid logic for edge cases
 
 ## Authentication:
 
