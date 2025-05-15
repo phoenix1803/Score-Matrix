@@ -96,8 +96,9 @@ Take a quick look at ScoreMatrix in action! Watch how scanned answer sheets are 
 
 ---
 
-### Mobile App
+## Mobile App
 - Make pdfs and upload files with ease
+- Smart AI features like Auto crop, auto set brightness
 
 ---
 
