@@ -96,6 +96,11 @@ Take a quick look at ScoreMatrix in action! Watch how scanned answer sheets are 
 
 ---
 
+### Mobile App
+- Make pdfs and upload files with ease
+
+---
+
 ## Extras
 
 ---
@@ -166,6 +171,11 @@ Built-in chatbot helps teachers or students query evaluation results, access rub
 - Google Cloud Run (fully serverless backend deployment)
 
 - Cloud Build for automated CI/CD pipelines
+
+## Mobile App:
+- Kotlin (Android App)
+- Jetpack Compose (UI)
+- Android Auto (for machine learning model used in AI features)
 
 ## Other Tools & Libraries:
 
