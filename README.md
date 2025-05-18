@@ -3,7 +3,19 @@
 
 A cloud-based platform that automates answer sheet evaluation using OCR, RAG-powered answer generation, custom rubrics, and deep performance insights – all from a single interface.
 
+
 ---
+
+# What sparked 𝐒𝐜𝐨𝐫𝐞 𝐌𝐚𝐭𝐫𝐢𝐱?
+
+During Pulkit’s first semester mid-term exams, he confidently answered every question and scored full marks—except for one 10-mark question where he was unexpectedly given zero. When he asked the teacher if there had been a mistake, the reply was simply, “Your answer is slightly wrong.” Later, Pulkit overheard another student asking about the same question. Despite that student's answer being nowhere close to correct, he had received 8 marks.
+
+This clear inconsistency wasn’t just frustrating—it revealed a deeper problem with how subjective and error-prone handwritten exam grading can be.
+
+After Pulkit shared this experience with us, we as a team decided it was time to build something better: a system that can evaluate handwritten answer sheets automatically, fairly, and efficiently.
+
+---
+
 
 # Demo 
 
