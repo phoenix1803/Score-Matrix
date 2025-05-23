@@ -347,7 +347,7 @@ To help with testing, here’s how you can set up sample data and test the flow:
 
 # Deployment
 - Live Demo Access:
-[Hosted on Google Cloud Run](https://scorematrixx-377627906357.asia-south2.run.app/)
+[Hosted on Google Cloud Run](https://sc0rematrix-377627906357.asia-south2.run.app/)
 ---
 
 # Future Improvements
