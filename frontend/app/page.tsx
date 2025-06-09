@@ -4,6 +4,7 @@ import React from 'react';
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { motion, useScroll, useSpring, useAnimation, } from "framer-motion";
+import Image from "next/image";
 
 interface SectionRefs {
   [key: string]: HTMLElement | null;
@@ -25,6 +26,7 @@ const HomePage = () => {
 
   // Refs for each section
   const heroRef = useRef(null);
+  const appRef = useRef(null);
   const stepsRef = useRef(null);
   const videoRef = useRef(null);
   const pricingRef = useRef(null);
@@ -33,10 +35,12 @@ const HomePage = () => {
 
   // Animation controls
   const stepsControls = useAnimation();
+  const appControls = useAnimation();
   const videoControls = useAnimation();
   const pricingControls = useAnimation();
   const whyUsControls = useAnimation();
   const communityControls = useAnimation();
+
 
   // Animation for floating elements
   const floatingAnimation = {
@@ -77,6 +81,9 @@ const HomePage = () => {
             case "steps":
               stepsControls.start("visible");
               break;
+            case "app":
+              appControls.start("visible");
+              break;
             case "video":
               videoControls.start("visible");
               break;
@@ -97,14 +104,16 @@ const HomePage = () => {
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
     if (heroRef.current) observer.observe(heroRef.current);
+    if (appRef.current) observer.observe(appRef.current);
     if (stepsRef.current) observer.observe(stepsRef.current);
     if (videoRef.current) observer.observe(videoRef.current);
     if (pricingRef.current) observer.observe(pricingRef.current);
     if (whyUsRef.current) observer.observe(whyUsRef.current);
     if (communityRef.current) observer.observe(communityRef.current);
 
+
     return () => observer.disconnect();
-  }, [stepsControls, videoControls, pricingControls, whyUsControls, communityControls]);
+  }, [stepsControls, appControls, videoControls, pricingControls, whyUsControls, communityControls]);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -143,7 +152,7 @@ const HomePage = () => {
       />
 
       <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-40 hidden md:block">
-        {["hero", "steps", "video", "pricing", "why-us", "community"].map((id) => (
+        {["hero", "app", "steps", "video", "pricing", "why-us", "community"].map((id) => (
           <motion.div
             key={id}
             className={`w-4 h-4 mb-4 rounded-full cursor-pointer border-2 border-primary ${activeSection === id ? "bg-primary" : "bg-transparent"
@@ -206,7 +215,7 @@ const HomePage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Streamline answer sheet evaluation with powerful AI precision
+            AI-powered answer sheet evaluation - now available on web and mobile
           </motion.p>
 
           <motion.div
@@ -226,19 +235,100 @@ const HomePage = () => {
 
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
-                href="#video"
+                href="#app"
                 className="bg-gradient-to-r from-pink-700 to-purple-700 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg transition duration-300 inline-block"
                 onClick={(e) => {
                   e.preventDefault();
-                  scrollToSection("video");
+                  scrollToSection("app");
                 }}
               >
-                Watch Demo
+                Get The App
               </Link>
             </motion.div>
           </motion.div>
+        </div>
+      </motion.section>
 
+      {/* Add the new app section */}
+      <motion.section
+        id="app"
+        ref={appRef}
+        className="py-24 bg-gradient-to-br from-indigo-50 to-purple-50 relative overflow-hidden"
+        variants={sectionVariants}
+        initial="hidden"
+        animate={appControls}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <motion.div
+              className="text-center md:text-left"
+              variants={itemVariants}
+            >
+              <motion.h2
+                className="text-3xl md:text-5xl font-bold mb-6"
+                variants={itemVariants}
+              >
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500">ScoreMatrix App</span> - Evaluation On The Go
+              </motion.h2>
 
+              <motion.p
+                className="text-lg text-gray-700 mb-8"
+                variants={itemVariants}
+              >
+                We&aposve solved mobile evaluation too! Download our app to grade answer sheets, manage results, and access analytics from anywhere.
+              </motion.p>
+
+              <motion.div
+                className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
+                variants={itemVariants}
+              >
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Link
+                    href="https://drive.usercontent.google.com/download?id=1boFPkyfIyXTeKaIze6SVVPZ2qg82t07m"
+                    className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition duration-300 inline-flex items-center"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M17.9 12.7c.1-.3.1-.6.1-.9 0-.3 0-.6-.1-.9l2.1-1.6c.2-.1.2-.3.1-.5l-2-3.5c-.1-.1-.3-.2-.5-.1l-2.5 1c-.5-.4-1.1-.7-1.7-.9l-.4-2.6c0-.2-.2-.3-.4-.3h-4c-.2 0-.3.1-.4.3l-.4 2.6c-.6.2-1.2.5-1.7.9l-2.5-1c-.2-.1-.4 0-.5.1l-2 3.5c-.1.1 0 .4.1.5l2.1 1.6c-.1.3-.1.6-.1.9 0 .3 0 .6.1.9l-2.1 1.6c-.2.1-.2.3-.1.5l2 3.5c.1.1.3.2.5.1l2.5-1c.5.4 1.1.7 1.7.9l.4 2.6c0 .2.2.3.4.3h4c.2 0 .3-.1.4-.3l.4-2.6c.6-.2 1.2-.5 1.7-.9l2.5 1c.2.1.4 0 .5-.1l2-3.5c.1-.1 0-.4-.1-.5l-2.1-1.6zM12 16c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z" />
+                    </svg>
+                    Download for Android
+                  </Link>
+                </motion.div>
+
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Link
+                    href="https://drive.usercontent.google.com/download?id=1boFPkyfIyXTeKaIze6SVVPZ2qg82t07m"
+                    className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition duration-300 inline-flex items-center"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M18.7 12.9c-.2 0-.4.1-.6.1-.2 0-.4 0-.6-.1-1.2-.4-2.1-1.5-2.1-2.8 0-1.7 1.4-3.1 3.1-3.1h.2c1.7 0 3.1 1.4 3.1 3.1 0 1.4-.9 2.5-2.1 2.8zM14 20H7c-1.7 0-3-1.3-3-3v-9c0-1.7 1.3-3 3-3h7c1.7 0 3 1.3 3 3v9c0 1.7-1.3 3-3 3z" />
+                    </svg>
+                    Download for iOS
+                  </Link>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+
+            <motion.div
+              className="flex flex-col items-center"
+              variants={itemVariants}
+              whileHover={{ scale: 1.05 }}
+            >
+              <div className="bg-white p-6 rounded-2xl shadow-xl">
+                <Image
+                  src="/qr.jpg" // Replace with your actual QR code image path
+                  alt="ScoreMatrix App QR Code"
+                  width={200}
+                  height={200}
+                  className="rounded-lg"
+                />
+              </div>
+              <p className="mt-4 text-gray-600 font-medium">Scan to download the app</p>
+            </motion.div>
+          </div>
         </div>
       </motion.section>
 
@@ -265,7 +355,7 @@ const HomePage = () => {
             className="text-lg text-gray-600 max-w-3xl mx-auto text-center mb-16"
             variants={itemVariants}
           >
-            Three simple steps to transform your answer sheet evaluation process
+            Three simple steps to transform your answer sheet evaluation process - on web or mobile
           </motion.p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
@@ -274,7 +364,7 @@ const HomePage = () => {
             {[
               {
                 title: "Upload Files",
-                description: "Securely upload your answer sheets in bulk with our drag-and-drop interface",
+                description: "Securely upload your answer sheets with our drag-and-drop interface or mobile camera",
                 icon: (
                   <svg className="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
@@ -292,7 +382,7 @@ const HomePage = () => {
               },
               {
                 title: "Get Results",
-                description: "Download comprehensive reports and analytics in seconds, not days",
+                description: "Download comprehensive reports or access them instantly on your mobile device",
                 icon: (
                   <svg className="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
@@ -411,7 +501,7 @@ const HomePage = () => {
             className="text-lg text-gray-600 max-w-3xl mx-auto text-center mb-16"
             variants={itemVariants}
           >
-            Choose the plan that works best for you!
+            One subscription works across all platforms - web and mobile
           </motion.p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
