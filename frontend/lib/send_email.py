@@ -4,8 +4,9 @@ import json
 import google.generativeai as genai
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
 from email import encoders
+from email.mime.base import MIMEBase
+
 
 genai.configure(api_key="") 
 
