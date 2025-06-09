@@ -30,7 +30,29 @@ interface Book {
   uploadedAt: string;
 }
 
+interface LessonPlan {
+  id: string;
+  name: string;
+  subject: string;
+  topics: string[];
+  duration: number;
+  createdAt: string;
+}
 
+interface AssignmentOptions {
+  topics: string;
+  questionCount: number;
+  difficulty: number;
+  type: 'HW' | 'Test' | 'Assignment' | 'Custom';
+  customType?: string;
+  questionTypes: string[];
+  totalMarks: number;
+  marksDistribution: 'equal' | 'smart';
+  duration?: number;
+  bloomLevel?: string;
+  includeAnswerKey: boolean;
+  instructions?: string;
+}
 
 const Dashboard = ({ username }: { username: string }) => {
   const router = useRouter();
@@ -45,7 +67,6 @@ const Dashboard = ({ username }: { username: string }) => {
       totalMarks: 10,
       uploadDate: "2025-02-27"
     },
-
   ]);
   const [showAddStudentForm, setShowAddStudentForm] = useState(false);
   const [newStudent, setNewStudent] = useState<Student>({
@@ -57,7 +78,7 @@ const Dashboard = ({ username }: { username: string }) => {
   const [emailContent, setEmailContent] = useState("");
   const [selectedEmailStudent, setSelectedEmailStudent] = useState<Student | null>(null);
   const [showEmailModal, setShowEmailModal] = useState(false);
-  const [activeSection, setActiveSection] = useState<"students" | "tests" | "materials">("students");
+  const [activeSection, setActiveSection] = useState<"students" | "tests" | "materials" | "lesson-plans" | "assignment-generator">("students");
   const [isLoading, setIsLoading] = useState(false);
   const [books, setBooks] = useState<Book[]>([]);
   const [showUploadModal, setShowUploadModal] = useState(false);
@@ -78,6 +99,31 @@ const Dashboard = ({ username }: { username: string }) => {
   }>({ field: "", direction: "asc" });
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
+  const [lessonPlans, setLessonPlans] = useState<LessonPlan[]>([]);
+  const [showLessonPlanForm, setShowLessonPlanForm] = useState(false);
+  const [newLessonPlan, setNewLessonPlan] = useState({
+    name: "",
+    subject: "",
+    topics: "",
+    duration: 1
+  });
+  const [assignmentOptions, setAssignmentOptions] = useState<AssignmentOptions>({
+    topics: "",
+    questionCount: 10,
+    difficulty: 3,
+    type: 'HW',
+    customType: '',
+    questionTypes: ['MCQ'],
+    totalMarks: 100,
+    marksDistribution: 'equal',
+    duration: 60,
+    bloomLevel: 'Understanding',
+    includeAnswerKey: true,
+    instructions: ''
+  });
+  const [showAssignmentGenerator, setShowAssignmentGenerator] = useState(false);
+  const [generatedContent, setGeneratedContent] = useState("");
+  const [showContentModal, setShowContentModal] = useState(false);
 
   const showSuccessNotification = (message: string) => {
     setNotificationMessage(message);
@@ -94,6 +140,7 @@ const Dashboard = ({ username }: { username: string }) => {
   const handleAddStudent = () => {
     setShowAddStudentForm(true);
   };
+
   useEffect(() => {
     fetch("/api/students")
       .then(response => response.json())
@@ -102,6 +149,7 @@ const Dashboard = ({ username }: { username: string }) => {
       })
       .catch(error => console.error("Error fetching students:", error));
   }, []);
+
   const handleSaveStudent = () => {
     if (!newStudent.rollNumber || !newStudent.name || !newStudent.email) {
       showSuccessNotification("Please fill all required fields");
@@ -136,7 +184,6 @@ const Dashboard = ({ username }: { username: string }) => {
       });
   };
 
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setNewStudent((prev) => ({ ...prev, [name]: value }));
@@ -147,6 +194,72 @@ const Dashboard = ({ username }: { username: string }) => {
     setNewTest((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleLessonPlanInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setNewLessonPlan(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleAssignmentOptionChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+
+    if (type === 'checkbox') {
+      const target = e.target as HTMLInputElement;
+      if (name === 'questionTypes') {
+        setAssignmentOptions(prev => {
+          const newTypes = target.checked
+            ? [...prev.questionTypes, value]
+            : prev.questionTypes.filter(t => t !== value);
+          return { ...prev, questionTypes: newTypes };
+        });
+      } else {
+        setAssignmentOptions(prev => ({ ...prev, [name]: target.checked }));
+      }
+    } else {
+      setAssignmentOptions(prev => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleGenerateLessonPlan = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/lesson-plan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...newLessonPlan,
+          topics: newLessonPlan.topics.split(',').map(topic => topic.trim())
+        })
+      });
+      const data = await response.json();
+      setGeneratedContent(data.content);
+      setShowContentModal(true);
+      showSuccessNotification("Lesson plan generated successfully!");
+    } catch (error) {
+      showSuccessNotification("Failed to generate lesson plan");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGenerateAssignment = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/assignment-generator', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(assignmentOptions)
+      });
+      const data = await response.json();
+      setGeneratedContent(data.content);
+      setShowContentModal(true);
+      showSuccessNotification("Assignment generated successfully!");
+    } catch (error) {
+      showSuccessNotification("Failed to generate assignment");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleSendEmail = () => {
     if (!selectedEmailStudent || !emailContent) {
       showSuccessNotification("Please fill email Subject");
@@ -154,7 +267,6 @@ const Dashboard = ({ username }: { username: string }) => {
     }
 
     setIsLoading(true);
-    // Send email data to backend to trigger Python file
     fetch("/api/sendEmail", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -181,6 +293,7 @@ const Dashboard = ({ username }: { username: string }) => {
         setShowEmailModal(false);
       });
   };
+
   const handleUpload = async () => {
     if (!selectedFile) {
       showSuccessNotification("Please select a file to upload");
@@ -200,15 +313,12 @@ const Dashboard = ({ username }: { username: string }) => {
 
       if (response.ok) {
         const data = await response.json();
-
-        // Add the new book to the books state
         const newBook = {
           id: Date.now().toString(),
           name: selectedFile.name,
           path: data.path,
           uploadedAt: new Date().toISOString(),
         };
-
         setBooks((prevBooks) => [...prevBooks, newBook]);
         showSuccessNotification("File uploaded successfully!");
       } else {
@@ -223,6 +333,20 @@ const Dashboard = ({ username }: { username: string }) => {
       setShowUploadModal(false);
     }
   };
+
+  useEffect(() => {
+    const fetchMaterials = async () => {
+      const response = await fetch("/api/getMaterials");
+      if (response.ok) {
+        const data = await response.json();
+        setBooks(data);
+      }
+    };
+
+    if (activeSection === "materials") {
+      fetchMaterials();
+    }
+  }, [activeSection]);
 
   const handleAddTest = () => {
     if (!newTest.name || !newTest.date || !newTest.subject) {
@@ -239,7 +363,6 @@ const Dashboard = ({ username }: { username: string }) => {
 
       setTests([...tests, newTestWithId]);
 
-      // Send data to backend as JSON
       fetch("/api/tests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -431,8 +554,8 @@ const Dashboard = ({ username }: { username: string }) => {
             <motion.div
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="bg-white bg-opacity-20 backdrop-blur-sm p-6 rounded-xl shadow-lg cursor-pointer text-white"
-              onClick={() => setActiveSection("materials")}
+              className={`${activeSection === "lesson-plans" ? "bg-indigo-600" : "bg-white bg-opacity-20"} backdrop-blur-sm p-6 rounded-xl shadow-lg cursor-pointer text-white`}
+              onClick={() => setActiveSection("lesson-plans")}
             >
               <div className="flex flex-col items-center justify-center h-full">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -446,8 +569,8 @@ const Dashboard = ({ username }: { username: string }) => {
             <motion.div
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="bg-white bg-opacity-20 backdrop-blur-sm p-6 rounded-xl shadow-lg cursor-pointer text-white"
-              onClick={() => setActiveSection("materials")}
+              className={`${activeSection === "assignment-generator" ? "bg-indigo-600" : "bg-white bg-opacity-20"} backdrop-blur-sm p-6 rounded-xl shadow-lg cursor-pointer text-white`}
+              onClick={() => setActiveSection("assignment-generator")}
             >
               <div className="flex flex-col items-center justify-center h-full">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -947,6 +1070,369 @@ const Dashboard = ({ username }: { username: string }) => {
                   </motion.div>
                 )}
               </motion.div>
+            ) : activeSection === "lesson-plans" ? (
+              <motion.div
+                key="lesson-plans"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3 }}
+                className="bg-white bg-opacity-90 backdrop-blur-sm p-6 rounded-xl shadow-md"
+              >
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-2xl font-bold text-gray-800">Lesson Plans</h2>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setShowLessonPlanForm(true)}
+                    className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-4 py-2 rounded-lg shadow flex items-center"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Create Plan
+                  </motion.button>
+                </div>
+
+                {showLessonPlanForm && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="mb-6 bg-gray-50 p-6 rounded-lg"
+                  >
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4">Create New Lesson Plan</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Plan Name</label>
+                        <input
+                          type="text"
+                          name="name"
+                          value={newLessonPlan.name}
+                          onChange={handleLessonPlanInputChange}
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                        <input
+                          type="text"
+                          name="subject"
+                          value={newLessonPlan.subject}
+                          onChange={handleLessonPlanInputChange}
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Topics (comma separated)</label>
+                        <textarea
+                          name="topics"
+                          value={newLessonPlan.topics}
+                          onChange={handleLessonPlanInputChange}
+                          rows={3}
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Duration (hours): {newLessonPlan.duration}
+                        </label>
+                        <input
+                          type="range"
+                          name="duration"
+                          min="1"
+                          max="20"
+                          value={newLessonPlan.duration}
+                          onChange={handleLessonPlanInputChange}
+                          className="w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex space-x-4 mt-4">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={handleGenerateLessonPlan}
+                        className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-2 rounded-lg shadow"
+                      >
+                        Generate Plan
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setShowLessonPlanForm(false)}
+                        className="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg shadow"
+                      >
+                        Cancel
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                )}
+
+                {lessonPlans.length > 0 ? (
+                  <div className="overflow-x-auto rounded-lg shadow">
+                    <table className="min-w-full bg-white">
+                      <thead>
+                        <tr className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
+                          <th className="px-6 py-3 text-left text-sm font-semibold">Name</th>
+                          <th className="px-6 py-3 text-left text-sm font-semibold">Subject</th>
+                          <th className="px-6 py-3 text-left text-sm font-semibold">Topics</th>
+                          <th className="px-6 py-3 text-left text-sm font-semibold">Duration (hours)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {lessonPlans.map((plan, index) => (
+                          <motion.tr
+                            key={index}
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.2, delay: index * 0.05 }}
+                            className="border-b border-gray-200 hover:bg-gray-50"
+                          >
+                            <td className="px-6 py-4 text-sm text-gray-700">{plan.name}</td>
+                            <td className="px-6 py-4 text-sm text-gray-700">{plan.subject}</td>
+                            <td className="px-6 py-4 text-sm text-gray-700">{plan.topics.join(', ')}</td>
+                            <td className="px-6 py-4 text-sm text-gray-700">{plan.duration}</td>
+                          </motion.tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="bg-gray-50 p-8 rounded-lg text-center"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    <p className="text-gray-600">No lesson plans created yet. Create your first lesson plan to get started.</p>
+                  </motion.div>
+                )}
+              </motion.div>
+            ) : activeSection === "assignment-generator" ? (
+              <motion.div
+                key="assignment-generator"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3 }}
+                className="bg-white bg-opacity-90 backdrop-blur-sm p-6 rounded-xl shadow-md"
+              >
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-2xl font-bold text-gray-800">Assignment Generator</h2>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setShowAssignmentGenerator(true)}
+                    className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-4 py-2 rounded-lg shadow flex items-center"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Generate Assignment
+                  </motion.button>
+                </div>
+
+                {showAssignmentGenerator && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="mb-6 bg-gray-50 p-6 rounded-lg"
+                  >
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4">Assignment Options</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Topics</label>
+                        <textarea
+                          name="topics"
+                          value={assignmentOptions.topics}
+                          onChange={handleAssignmentOptionChange}
+                          rows={2}
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                          placeholder="Enter topics (comma separated)"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Number of Questions</label>
+                        <input
+                          type="number"
+                          name="questionCount"
+                          min="1"
+                          max="50"
+                          value={assignmentOptions.questionCount}
+                          onChange={handleAssignmentOptionChange}
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Difficulty: {['Very Easy', 'Easy', 'Medium', 'Hard', 'Very Hard'][assignmentOptions.difficulty - 1]}
+                        </label>
+                        <input
+                          type="range"
+                          name="difficulty"
+                          min="1"
+                          max="5"
+                          value={assignmentOptions.difficulty}
+                          onChange={handleAssignmentOptionChange}
+                          className="w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer"
+                        />
+                      </div>
+
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                        <div className="flex space-x-4">
+                          {['HW', 'Test', 'Assignment', 'Custom'].map(type => (
+                            <label key={type} className="inline-flex items-center">
+                              <input
+                                type="radio"
+                                name="type"
+                                value={type}
+                                checked={assignmentOptions.type === type}
+                                onChange={handleAssignmentOptionChange}
+                                className="text-indigo-600 focus:ring-indigo-500"
+                              />
+                              <span className="ml-2">{type}</span>
+                            </label>
+                          ))}
+                        </div>
+                        {assignmentOptions.type === 'Custom' && (
+                          <input
+                            type="text"
+                            name="customType"
+                            value={assignmentOptions.customType}
+                            onChange={handleAssignmentOptionChange}
+                            placeholder="Enter custom type"
+                            className="w-full mt-2 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                          />
+                        )}
+                      </div>
+
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Question Types</label>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                          {['MCQ', 'Short Answer', 'Long Answer', 'Fill in the Blanks', 'True/False', 'Matching'].map(type => (
+                            <label key={type} className="inline-flex items-center">
+                              <input
+                                type="checkbox"
+                                name="questionTypes"
+                                value={type}
+                                checked={assignmentOptions.questionTypes.includes(type)}
+                                onChange={handleAssignmentOptionChange}
+                                className="text-indigo-600 focus:ring-indigo-500"
+                              />
+                              <span className="ml-2">{type}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Total Marks</label>
+                        <input
+                          type="number"
+                          name="totalMarks"
+                          min="1"
+                          value={assignmentOptions.totalMarks}
+                          onChange={handleAssignmentOptionChange}
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Marks Distribution</label>
+                        <select
+                          name="marksDistribution"
+                          value={assignmentOptions.marksDistribution}
+                          onChange={handleAssignmentOptionChange}
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        >
+                          <option value="equal">Equal per question</option>
+                          <option value="smart">Smart distribution</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Duration (minutes)</label>
+                        <input
+                          type="number"
+                          name="duration"
+                          min="1"
+                          value={assignmentOptions.duration}
+                          onChange={handleAssignmentOptionChange}
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Bloom's Level</label>
+                        <select
+                          name="bloomLevel"
+                          value={assignmentOptions.bloomLevel}
+                          onChange={handleAssignmentOptionChange}
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        >
+                          <option value="Remembering">Remembering</option>
+                          <option value="Understanding">Understanding</option>
+                          <option value="Applying">Applying</option>
+                          <option value="Analyzing">Analyzing</option>
+                          <option value="Evaluating">Evaluating</option>
+                          <option value="Creating">Creating</option>
+                        </select>
+                      </div>
+
+                      <div className="md:col-span-2">
+                        <label className="inline-flex items-center">
+                          <input
+                            type="checkbox"
+                            name="includeAnswerKey"
+                            checked={assignmentOptions.includeAnswerKey}
+                            onChange={handleAssignmentOptionChange}
+                            className="text-indigo-600 focus:ring-indigo-500"
+                          />
+                          <span className="ml-2">Include Answer Key</span>
+                        </label>
+                      </div>
+
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Instructions</label>
+                        <textarea
+                          name="instructions"
+                          value={assignmentOptions.instructions}
+                          onChange={handleAssignmentOptionChange}
+                          rows={2}
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                          placeholder="Optional instructions for students"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex space-x-4 mt-4">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={handleGenerateAssignment}
+                        className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-2 rounded-lg shadow"
+                      >
+                        Generate Assignment
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setShowAssignmentGenerator(false)}
+                        className="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg shadow"
+                      >
+                        Cancel
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                )}
+              </motion.div>
             ) : null}
           </AnimatePresence>
 
@@ -1106,6 +1592,50 @@ const Dashboard = ({ username }: { username: string }) => {
                       className="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg shadow"
                     >
                       Cancel
+                    </motion.button>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <AnimatePresence>
+            {showContentModal && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+              >
+                <motion.div
+                  initial={{ scale: 0.9, y: 20 }}
+                  animate={{ scale: 1, y: 0 }}
+                  exit={{ scale: 0.9, y: 20 }}
+                  className="bg-white rounded-xl shadow-xl p-6 w-full max-w-4xl max-h-[80vh] flex flex-col"
+                >
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-bold text-gray-800">Generated Content</h3>
+                    <button onClick={() => setShowContentModal(false)} className="text-gray-500 hover:text-gray-700">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div className="flex-1 overflow-auto bg-gray-50 p-4 rounded-lg mb-4">
+                    <pre className="whitespace-pre-wrap font-sans text-sm">{generatedContent}</pre>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => {
+                        navigator.clipboard.writeText(generatedContent);
+                        showSuccessNotification("Content copied to clipboard!");
+                      }}
+                      className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-2 rounded-lg shadow"
+                    >
+                      Copy to Clipboard
                     </motion.button>
                   </div>
                 </motion.div>
