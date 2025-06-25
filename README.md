@@ -31,7 +31,6 @@ Take a quick look at ScoreMatrix in action! Watch how scanned answer sheets are 
 
 ---
 
----
 
 # Core Features
 
@@ -73,9 +72,9 @@ Take a quick look at ScoreMatrix in action! Watch how scanned answer sheets are 
 - Rubrics are stored per test session, and reused as needed.
 - Hybrid grading: ML-based + Rule-based scoring mechanisms.
 ![RAG Answer Generation](pictures/custom-rubrics.gif)
-(Website)
+Website
 ![App RAG Answer Generation](pictures/app-param.jpg)
-(App)
+App
   
 ---
 
@@ -100,9 +99,9 @@ Take a quick look at ScoreMatrix in action! Watch how scanned answer sheets are 
 ### Dashboard for Analytics  
 - Insights into student performance, weak areas, and overall class trends.  
 ![Dashboard](pictures/analytics-dashboard.png)
-- (Website)
+Website
 ![APP Dashboard](pictures/app-home.jpg)
-- (App)
+App
 ---
 
 ### Personalized Feedback System  
@@ -116,9 +115,9 @@ Take a quick look at ScoreMatrix in action! Watch how scanned answer sheets are 
 - Customizable Assignment Creation
 - Flexible Question & Output Options
 ![Assignment Generation](pictures/assignment.png)
-- (Website)
+Website
 ![App Assignment Generation](pictures/app-assignment-generator.jpg)
-- (App)
+App
   
 ---
 
@@ -126,9 +125,9 @@ Take a quick look at ScoreMatrix in action! Watch how scanned answer sheets are 
 - Streamlined Planning Workflow
 - Structured Lesson Plan Generator
 ![Lessson planner](pictures/lesson-plan.png)
-- (Website)
+Website
 ![Lessson planner](pictures/app-lesson-plan.jpg)
-- (App)
+App
   
 ---
 
