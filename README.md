@@ -73,8 +73,10 @@ Take a quick look at ScoreMatrix in action! Watch how scanned answer sheets are 
 - Rubrics are stored per test session, and reused as needed.
 - Hybrid grading: ML-based + Rule-based scoring mechanisms.
 ![RAG Answer Generation](pictures/custom-rubrics.gif)
+- (Website)
 ![App RAG Answer Generation](pictures/app-param.jpg)
-
+- (App)
+  
 ---
 
 ## Scoring Justification  
