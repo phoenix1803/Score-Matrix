@@ -98,8 +98,9 @@ Take a quick look at ScoreMatrix in action! Watch how scanned answer sheets are 
 ### Dashboard for Analytics  
 - Insights into student performance, weak areas, and overall class trends.  
 ![Dashboard](pictures/analytics-dashboard.png)
+- (Website)
 ![APP Dashboard](pictures/app-home.jpg)
-
+- (App)
 ---
 
 ### Personalized Feedback System  
@@ -113,14 +114,20 @@ Take a quick look at ScoreMatrix in action! Watch how scanned answer sheets are 
 - Customizable Assignment Creation
 - Flexible Question & Output Options
 ![Assignment Generation](pictures/assignment.png)
+- (Website)
 ![App Assignment Generation](pictures/app-assignment-generator.jpg)
+- (App)
+  
 ---
 
 ### Lesson Planner
 - Streamlined Planning Workflow
 - Structured Lesson Plan Generator
 ![Lessson planner](pictures/lesson-plan.png)
+- (Website)
 ![Lessson planner](pictures/app-lesson-plan.jpg)
+- (App)
+  
 ---
 
 ### Secure Admin Access  
@@ -373,7 +380,7 @@ To help with testing, here’s how you can set up sample data and test the flow:
 [Hosted on Google Cloud Run](https://sc0rematrix-377627906357.asia-south2.run.app/)
 ---
 # Android app download
-- G-drive Link
+- G-drive Link:
 [Download](https://drive.usercontent.google.com/download?id=1boFPkyfIyXTeKaIze6SVVPZ2qg82t07m)
 ---
 
