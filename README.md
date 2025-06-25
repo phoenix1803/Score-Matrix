@@ -113,14 +113,14 @@ Take a quick look at ScoreMatrix in action! Watch how scanned answer sheets are 
 - Customizable Assignment Creation
 - Flexible Question & Output Options
 ![Assignment Generation](pictures/assignment.png)
-![App Assignment Generation](app-assignment-generator.jpg)
+![App Assignment Generation](pictures/app-assignment-generator.jpg)
 ---
 
 ### Lesson Planner
 - Streamlined Planning Workflow
 - Structured Lesson Plan Generator
 ![Lessson planner](pictures/lesson-plan.png)
-![Lessson planner](app-lesson-plan.jpg)
+![Lessson planner](pictures/app-lesson-plan.jpg)
 ---
 
 ### Secure Admin Access  
