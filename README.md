@@ -1,7 +1,7 @@
 # ScoreMatrix – 
 ## *Streamline answer sheet evaluation with powerful AI precision*  
 
-A cloud-based platform that automates answer sheet evaluation using OCR, RAG-powered answer generation, custom rubrics, and deep performance insights – all from a single interface.
+A cloud-based platform and android app that automates answer sheet evaluation using OCR, RAG-powered answer generation, custom rubrics, and deep performance insights – all from a single interface.
 
  
 ---
@@ -21,8 +21,15 @@ After Pulkit shared this experience with us, we as a team decided it was time to
 
 Take a quick look at ScoreMatrix in action! Watch how scanned answer sheets are uploaded, automatically evaluated, and analyzed with performance breakdowns.
 
-[![ScoreMatrix Full Demo](pictures/scorematrix-demo-thumbnail.png)](https://youtu.be/NBsb-AdMObI)
+[![ScoreMatrix Full Demo](pictures/scorematrix-demo-thumbnail.png)](https://youtu.be/ZGU5FUgzceo?si=ZOsNPhdAhwx-UtrO)
 
+---
+
+# Flow diagram
+
+![flow](pictures/flow.png)
+
+---
 
 ---
 
@@ -66,7 +73,7 @@ Take a quick look at ScoreMatrix in action! Watch how scanned answer sheets are 
 - Rubrics are stored per test session, and reused as needed.
 - Hybrid grading: ML-based + Rule-based scoring mechanisms.
 ![RAG Answer Generation](pictures/custom-rubrics.gif)
-
+![App RAG Answer Generation](pictures/app-param.jpg)
 
 ---
 
@@ -91,6 +98,7 @@ Take a quick look at ScoreMatrix in action! Watch how scanned answer sheets are 
 ### Dashboard for Analytics  
 - Insights into student performance, weak areas, and overall class trends.  
 ![Dashboard](pictures/analytics-dashboard.png)
+![APP Dashboard](pictures/app-home.jpg)
 
 ---
 
@@ -101,6 +109,20 @@ Take a quick look at ScoreMatrix in action! Watch how scanned answer sheets are 
 
 ---
 
+### Assignment Generation
+- Customizable Assignment Creation
+- Flexible Question & Output Options
+![Assignment Generation](pictures/assignment.png)
+![App Assignment Generation](app-assignment-generator.jpg)
+---
+
+### Lesson Planner
+- Streamlined Planning Workflow
+- Structured Lesson Plan Generator
+![Lessson planner](pictures/lesson-plan.png)
+![Lessson planner](app-lesson-plan.jpg)
+---
+
 ### Secure Admin Access  
 - Secure login system powered by Firebase.
 - Passwordless auth + Google OAuth supported.
@@ -108,9 +130,10 @@ Take a quick look at ScoreMatrix in action! Watch how scanned answer sheets are 
 
 ---
 
-## Mobile App
+## Mobile App AI features
 - Make pdfs and upload files with ease
 - Smart AI features like Auto crop, auto set brightness
+![App Extra](pictures/112124.jpg)
 
 ---
 
@@ -275,7 +298,7 @@ The app should now be running at [http://localhost:3000](http://localhost:3000).
 /resetDefaults: Deletes uploads and makes everythin usable againg
 
 ---
-# Flow:
+# Flow (Same for both cloud website and android app):
 1. Login:
 
 - The user logs in (likely as a teacher or evaluator) by entering student details (scrolling down to the appropriate section).
@@ -308,7 +331,7 @@ The app should now be running at [http://localhost:3000](http://localhost:3000).
 
 ---
 
-# Sample Data / Test Flow:
+# Sample Data / Test Flow (Same for both cloud website and android app):
 To help with testing, here’s how you can set up sample data and test the flow:
 
 ## Sample Files:
@@ -348,6 +371,10 @@ To help with testing, here’s how you can set up sample data and test the flow:
 # Deployment
 - Live Demo Access:
 [Hosted on Google Cloud Run](https://sc0rematrix-377627906357.asia-south2.run.app/)
+---
+# Android app download
+- G-drive Link
+[Download](https://drive.usercontent.google.com/download?id=1boFPkyfIyXTeKaIze6SVVPZ2qg82t07m)
 ---
 
 # Future Improvements
