@@ -2,7 +2,7 @@
 ## *Streamline answer sheet evaluation with powerful AI precision*  
         
 A cloud-based platform and android app that automates answer sheet evaluation using OCR, RAG-powered answer generation, custom rubrics, and deep performance insights – all from a single interface.
-  
+   
 ---          
 
 # What sparked 𝐒𝐜𝐨𝐫𝐞 𝐌𝐚𝐭𝐫𝐢𝐱?
