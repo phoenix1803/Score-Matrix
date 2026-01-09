@@ -26,7 +26,7 @@ Take a quick look at ScoreMatrix in action! Watch how scanned answer sheets are 
 
 # Flow diagram
 
-![flow](pictures/flow.png)
+![flow](pictures/flowchart.png)
 
 ---
 
